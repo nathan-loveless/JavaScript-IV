@@ -67,6 +67,71 @@ class Humanoid extends CharacterStats
 	}	 
 	
 	greet() { return `${this.name} offers a greeting in ${this.language}`; }
+
+	attack(attackee)
+	{
+		if(!this.isDead())
+		{
+			let damage = 0;
+			//Check to see if attackeet blocks the attack
+				if(attackee.block())
+				{
+					console.log(`you attack ${attackee.name} but ${attackee.name} blocks you\n`);
+					return;
+				}
+
+		else
+		{
+			// Check for special attack
+			if(this.specialCounter >= this.specialAttackInit) 
+			{ 
+				damage = this.specialAttack(); 
+				console.log('Special Attack!!');
+			}
+
+			// the max damage he does is his max attackPower randomized to be 0.1 to max
+			else { damage = this.regularAttack(); } 
+		} 
+
+			attackee.isHit(damage)
+
+				if(attackee.isDead()) { console.log(`you killed ${attackee.name}!\n`); }
+
+				else { console.log(`you hit ${attackee.name} for ${damage} he has ${attackee.healthPoints} hp left!\n`); }    
+		}
+	}
+	
+	block()
+	{
+		if(((Math.random() * 100) + 1) <= this.blockPercentage) { return true; }
+      return false;
+	}
+	
+	regularAttack()
+	{
+		this.specialCounter++;
+	  	let damage = Math.random() * (this.attackPower * 100) + 1;
+	  	return Math.round(damage);
+	}
+	
+	specialAttack()
+	{
+		// Get the regular damage
+  		this.specialCounter = 0;
+  		let damage = Math.random() * (this.attackPower * 100) + 1;
+		
+		// Add his special multiplier
+  		damage += (Math.random() * 100 + 1) * this.specialMultiplier;
+   		return Math.round(damage);
+	}
+	
+	isHit(damage) { this.healthPoints -= damage; }
+
+	isDead()
+	{
+			if(this.healthPoints <= 0) { return true; }
+  		return false;
+	}
 }
 
 // Stretch Goal constructors
@@ -82,71 +147,6 @@ class Hero extends Humanoid
 	  	this.specialMultiplier = attr.specialMultiplier;
 	  	this.specialCounter = 0;
 	}
-	
-	attack(attackee)
-	{
-		if(!this.isDead())
-		{
-			let damage = 0;
-			//Check to see if attackeet blocks the attack
-				if(attackee.block())
-				{
-					console.log(`you attack ${attackee.name} but ${attackee.name} blocks you\n`);
-					return;
-				}
-
-		else
-		{
-			// Check for special attack
-			if(this.specialCounter >= this.specialAttackInit) 
-			{ 
-				damage = this.specialAttack(); 
-				console.log('Special Attack!!');
-			}
-
-			// the max damage he does is his max attackPower randomized to be 0.1 to max
-			else { damage = this.regularAttack(); } 
-		} 
-
-			attackee.isHit(damage)
-
-				if(attackee.isDead()) { console.log(`you killed ${attackee.name}!\n`); }
-
-				else { console.log(`you hit ${attackee.name} for ${damage} he has ${attackee.healthPoints} hp left!\n`); }    
-		}
-	}
-	
-	block()
-	{
-		if(((Math.random() * 100) + 1) <= this.blockPercentage) { return true; }
-      return false;
-	}
-	
-	regularAttack()
-	{
-		this.specialCounter++;
-	  	let damage = Math.random() * (this.attackPower * 100) + 1;
-	  	return Math.round(damage);
-	}
-	
-	specialAttack()
-	{
-		// Get the regular damage
-  		this.specialCounter = 0;
-  		let damage = Math.random() * (this.attackPower * 100) + 1;
-		
-		// Add his special multiplier
-  		damage += (Math.random() * 100 + 1) * this.specialMultiplier;
-   		return Math.round(damage);
-	}
-	
-	isHit(damage) { this.healthPoints -= damage; }
-
-	isDead()
-	{
-			if(this.healthPoints <= 0) { return true; }
-  		return false;
-	}
 }
 
 class Villian extends Humanoid
@@ -160,71 +160,6 @@ class Villian extends Humanoid
 	  	this.specialAttackInit = attr.specialAttackInit;
 	  	this.specialMultiplier = attr.specialMultiplier;
 	  	this.specialCounter = 0;
-	}
-	
-	attack(attackee)
-	{
-		if(!this.isDead())
-		{
-			let damage = 0;
-			//Check to see if attackeet blocks the attack
-				if(attackee.block())
-				{
-					console.log(`you attack ${attackee.name} but ${attackee.name} blocks you\n`);
-					return;
-				}
-
-		else
-		{
-			// Check for special attack
-			if(this.specialCounter >= this.specialAttackInit) 
-			{ 
-				damage = this.specialAttack(); 
-				console.log('Special Attack!!');
-			}
-
-			// the max damage he does is his max attackPower randomized to be 0.1 to max
-			else { damage = this.regularAttack(); } 
-		} 
-
-			attackee.isHit(damage)
-
-				if(attackee.isDead()) { console.log(`you killed ${attackee.name}!\n`); }
-
-				else { console.log(`you hit ${attackee.name} for ${damage} he has ${attackee.healthPoints} hp left!\n`); }    
-		}
-	}
-	
-	block()
-	{
-		if(((Math.random() * 100) + 1) <= this.blockPercentage) { return true; }
-      return false;
-	}
-	
-	regularAttack()
-	{
-		this.specialCounter++;
-	  	let damage = Math.random() * (this.attackPower * 100) + 1;
-	  	return Math.round(damage);
-	}
-	
-	specialAttack()
-	{
-		// Get the regular damage
-  		this.specialCounter = 0;
-  		let damage = Math.random() * (this.attackPower * 100) + 1;
-		
-		// Add his special multiplier
-  		damage += (Math.random() * 100 + 1) * this.specialMultiplier;
-   		return Math.round(damage);
-	}
-	
-	isHit(damage) { this.healthPoints -= damage; }
-
-	isDead()
-	{
-			if(this.healthPoints <= 0) { return true; }
-  		return false;
 	}
 }
  
